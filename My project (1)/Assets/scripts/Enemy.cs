@@ -10,7 +10,8 @@ public class Enemy : MonoBehaviour
         Basic,
         Triple,
         Shot,
-        Fast
+        Fast,
+        Boss
     }
 
     public EnemyType enemyType;
@@ -23,6 +24,8 @@ public class Enemy : MonoBehaviour
     public float fireDelay = 2f;
     private float fireTimer = 0f;
 
+    public float hp = 10f;
+
     void SetEnemyType()
     {
         switch (enemyType)
@@ -30,30 +33,34 @@ public class Enemy : MonoBehaviour
             case EnemyType.Basic:
                 moveSpeed = 1f;
                 fireDelay = 2f;
+                hp = 30f;
                 break;
             case EnemyType.Triple:
                 moveSpeed = 0.75f;
                 fireDelay = 2.5f;
+                hp = 40f;
                 break;
             case EnemyType.Shot:
                 moveSpeed = 0.5f;
                 fireDelay = 3f;
+                hp = 60f;
                 break;
             case EnemyType.Fast:
                 moveSpeed = 1f;
                 fireDelay = 1f;
+                hp = 60f;
                 break;
         }
     }
 
-    // Start is called before the first frame update
+
     void Awake()
     {
         player = GameObject.FindWithTag("Player").transform;
         SetEnemyType();
     }
 
-    // Update is called once per frame
+
     void Update()
     {
         LookAtPlayer();
@@ -63,6 +70,8 @@ public class Enemy : MonoBehaviour
 
     void Move()
     {
+        if (enemyType == EnemyType.Boss) return; //보스 타입의 개체는 안 움직이게
+
         Vector3 dir = (player.position - transform.position).normalized;
         transform.position += dir * moveSpeed * Time.deltaTime;
     }
@@ -77,13 +86,13 @@ public class Enemy : MonoBehaviour
 
     void Fire()
     {
-        fireTimer = Time.deltaTime;
+        fireTimer += Time.deltaTime;
 
-        if(fireTimer >= fireDelay)
+        if (fireTimer >= fireDelay)
         {
             fireTimer = 0f;
 
-            switch(enemyType)
+            switch (enemyType)
             {
                 case EnemyType.Basic:
                     FireSingle();
@@ -99,6 +108,14 @@ public class Enemy : MonoBehaviour
                 case EnemyType.Fast:
                     FireSingle();
                     break;
+                case EnemyType.Boss:
+                    FireSingle();
+                    FireSingle();
+                    FireSingle();
+                    FireSingle();
+                    FireSingle();
+                    break;
+                    FireSingle();
 
             }
         }
@@ -107,5 +124,31 @@ public class Enemy : MonoBehaviour
     void FireSingle()
     {
         Instantiate(missilePrefab, firePoint.position, firePoint.rotation);
+    }
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Bullet"))
+        {
+            TakeDamage(10f);
+            Destroy(collision.gameObject);
+        }
+    }
+
+    public void TakeDamage(float damage)
+    {
+        hp -= damage;
+        Debug.Log("적의 남은 체력: " + hp);
+
+        if (hp <= 0)
+        {
+            Die();
+        }
+    }
+
+    void Die()
+    {
+        GameObject.FindObjectOfType<Stage>().AddScore(100);
+        Destroy(gameObject);
     }
 }

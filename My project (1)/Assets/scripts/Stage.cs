@@ -1,10 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Stage : MonoBehaviour
 {
     public int stage = 1;
+    public int bossstart = 1000;
+    public bool isBossStage = false;
+
+    public GameObject bossPrefab;
+    public Transform bossSpawnPoint;
+
 
     public GameObject[] stage1Enemies;
     public GameObject[] stage2Enemies;
@@ -14,6 +21,8 @@ public class Stage : MonoBehaviour
 
     public float spawnDelay = 2f;
     private float timer = 0f;
+
+    public int score = 0;
 
 
     void Awake()
@@ -25,7 +34,7 @@ public class Stage : MonoBehaviour
     {
         timer += Time.deltaTime;
 
-        if(timer >= spawnDelay)
+        if (timer >= spawnDelay)
         {
             SpawnEnemy();
             timer = 0f;
@@ -68,4 +77,29 @@ public class Stage : MonoBehaviour
 
         return new Vector2(x, y);
     }
+
+    public void AddScore(int amount)
+    {
+        score += amount;
+
+        if (!isBossStage && score >= bossstart)
+        {
+            SceneManager.LoadScene("Boss1");
+        }
+    }
+
+   
+
+    public void GameOver()
+    {
+        if(isBossStage)
+        {
+            SceneManager.LoadScene("Boss1");
+        }
+        else
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+    }
+
 }

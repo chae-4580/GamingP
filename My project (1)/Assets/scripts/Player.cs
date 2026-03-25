@@ -14,6 +14,8 @@ public class Player : MonoBehaviour
     public float hp = 100f; // 현재 피
     public float maxHp = 100f; // 최대 피
 
+    public int powerLevel = 1;
+
     void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
@@ -60,14 +62,8 @@ public class Player : MonoBehaviour
 
         if (hp <= 0)
         {
-            GameOver();
+            GameObject.FindObjectOfType<Stage>().GameOver();
+            
         }
-    }
-
-    void GameOver()
-    {
-        Debug.Log("게임 오버!");
-        // 캐릭터를 화면에서 사라지게 함
-        gameObject.SetActive(false);
     }
 }

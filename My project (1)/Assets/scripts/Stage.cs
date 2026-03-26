@@ -73,6 +73,7 @@ public class Stage : MonoBehaviour
     Vector2 GetSpawnPosition()
     {
         float x = Random.Range(-8f, 8f);
+        //속도가 낮아서 바꿨음
         float y = Random.Range(-4f, 4f);
 
         return new Vector2(x, y);

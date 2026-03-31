@@ -1,16 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class Stage : MonoBehaviour
 {
     public int stage = 1;
-    public int bossstart = 1000;
-    public bool isBossStage = false;
 
-    public GameObject bossPrefab;
-    public Transform bossSpawnPoint;
+    public float limitTime = 60f;
+    private float currentTimer = 0f;
 
 
     public GameObject[] stage1Enemies;
@@ -24,16 +23,28 @@ public class Stage : MonoBehaviour
 
     public int score = 0;
 
+    public TextMeshProUGUI scoretext;
+    public TextMeshProUGUI timerText;
+
 
     void Awake()
     {
+        currentTimer = limitTime;
         SetStage(stage);
+        UpdateScoreUI();
     }
 
     void Update()
     {
-        timer += Time.deltaTime;
+        currentTimer -= Time.deltaTime; 
+        UpdateTimer();
+        if(currentTimer <= 0)
+        {
+            GameOver();
+            return;
+        }
 
+        timer += Time.deltaTime;
         if (timer >= spawnDelay)
         {
             SpawnEnemy();
@@ -68,39 +79,44 @@ public class Stage : MonoBehaviour
         Vector2 spawnPos = GetSpawnPosition();
 
         Instantiate(currentEnemies[rand], spawnPos, Quaternion.identity);
-    }
+    }//적 스폰 코드
 
     Vector2 GetSpawnPosition()
     {
         float x = Random.Range(-8f, 8f);
-        //속도가 낮아서 바꿨음
         float y = Random.Range(-4f, 4f);
 
         return new Vector2(x, y);
-    }
+    } //스폰 포지션 및 속도 코드
 
     public void AddScore(int amount)
     {
         score += amount;
+        UpdateScoreUI();
+    } //스코어판 코드
 
-        if (!isBossStage && score >= bossstart)
+    void UpdateScoreUI()
+    {
+        if(scoretext != null)
         {
-            SceneManager.LoadScene("Boss1");
+            scoretext.text = "Score: " + score.ToString();
+
+        }
+    }
+    //오류남
+   
+    void UpdateTimer()
+    {
+        if ((timerText != null))
+        {
+            timerText.text = "Time: " + Mathf.CeilToInt(currentTimer).ToString();
         }
     }
 
-   
-
     public void GameOver()
     {
-        if(isBossStage)
-        {
-            SceneManager.LoadScene("Boss1");
-        }
-        else
-        {
+        
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        }
     }
 
 }

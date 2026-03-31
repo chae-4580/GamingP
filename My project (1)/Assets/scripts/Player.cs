@@ -62,8 +62,7 @@ public class Player : MonoBehaviour
 
         if (hp <= 0)
         {
-            GameObject.FindObjectOfType<Stage>().GameOver();
-            
+            GameObject.FindObjectOfType<Stage>().GameOver();  
         }
     }
 }

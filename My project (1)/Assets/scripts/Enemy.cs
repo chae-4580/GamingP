@@ -70,8 +70,6 @@ public class Enemy : MonoBehaviour
 
     void Move()
     {
-        if (enemyType == EnemyType.Boss) return; //보스 타입의 개체는 안 움직이게
-
         Vector3 dir = (player.position - transform.position).normalized;
         transform.position += dir * moveSpeed * Time.deltaTime;
     }
@@ -108,14 +106,6 @@ public class Enemy : MonoBehaviour
                 case EnemyType.Fast:
                     FireSingle();
                     break;
-                case EnemyType.Boss:
-                    FireSingle();
-                    FireSingle();
-                    FireSingle();
-                    FireSingle();
-                    FireSingle();
-                    break;
-                    FireSingle();
 
             }
         }

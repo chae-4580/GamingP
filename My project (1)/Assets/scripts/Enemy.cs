@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class Enemy : MonoBehaviour
 {
@@ -11,7 +12,7 @@ public class Enemy : MonoBehaviour
         Triple,
         Shot,
         Fast,
-        Boss
+        Boom
     }
 
     public EnemyType enemyType;
@@ -50,6 +51,11 @@ public class Enemy : MonoBehaviour
                 fireDelay = 1f;
                 hp = 60f;
                 break;
+            case EnemyType.Boom:
+                moveSpeed = 1f;
+                fireDelay = 2f;
+                hp = 60f;
+                break;
         }
     }
 
@@ -76,10 +82,9 @@ public class Enemy : MonoBehaviour
 
     void LookAtPlayer()
     {
-        Vector2 dir = (player.position - transform.position).normalized;
-        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        Vector3 dir = (player.position - transform.position).normalized;
 
-        transform.rotation = Quaternion.AngleAxis(angle, Vector3.back);
+        transform.rotation = Quaternion.FromToRotation(Vector3.up, dir);
     }
 
     void Fire()
@@ -90,24 +95,7 @@ public class Enemy : MonoBehaviour
         {
             fireTimer = 0f;
 
-            switch (enemyType)
-            {
-                case EnemyType.Basic:
-                    FireSingle();
-                    break;
-                case EnemyType.Triple:
-                    FireSingle();
-                    FireSingle();
-                    FireSingle();
-                    break;
-                case EnemyType.Shot:
-                    FireSingle();
-                    break;
-                case EnemyType.Fast:
-                    FireSingle();
-                    break;
-
-            }
+            FireSingle();
         }
     }
 

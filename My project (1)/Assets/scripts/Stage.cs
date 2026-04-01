@@ -11,12 +11,8 @@ public class Stage : MonoBehaviour
     public float limitTime = 60f;
     private float currentTimer = 0f;
 
-
-    public GameObject[] stage1Enemies;
-    public GameObject[] stage2Enemies;
-    public GameObject[] stage3Enemies;
-
-    private GameObject[] currentEnemies;
+    
+    public GameObject[] Enemies1;
 
     public float spawnDelay = 2f;
     private float timer = 0f;
@@ -30,7 +26,6 @@ public class Stage : MonoBehaviour
     void Awake()
     {
         currentTimer = limitTime;
-        SetStage(stage);
         UpdateScoreUI();
     }
 
@@ -40,6 +35,7 @@ public class Stage : MonoBehaviour
         UpdateTimer();
         if(currentTimer <= 0)
         {
+            stage++;
             GameOver();
             return;
         }
@@ -51,34 +47,15 @@ public class Stage : MonoBehaviour
             timer = 0f;
         }
     }
-    void SetStage(int stage)
-    {
-        switch (stage)
-        {
-            case 1:
-                currentEnemies = stage1Enemies;
-                spawnDelay = 2f;
-                break;
-            case 2:
-                currentEnemies = stage2Enemies;
-                spawnDelay = 1.5f;
-                break;
-            case 3:
-                currentEnemies = stage3Enemies;
-                spawnDelay = 1f;
-                break;
-        }
-
-    }
 
     void SpawnEnemy()
     {
-        if (currentEnemies.Length == 0) return;
+        if (Enemies1.Length == 0) return;
 
-        int rand = Random.Range(0, currentEnemies.Length);
+        int rand = Random.Range(0, Enemies1.Length);
         Vector2 spawnPos = GetSpawnPosition();
 
-        Instantiate(currentEnemies[rand], spawnPos, Quaternion.identity);
+        Instantiate(Enemies1[rand], spawnPos, Quaternion.identity);
     }//적 스폰 코드
 
     Vector2 GetSpawnPosition()
@@ -116,7 +93,7 @@ public class Stage : MonoBehaviour
     public void GameOver()
     {
         
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            SceneManager.LoadScene(stage - 1);
     }
 
 }

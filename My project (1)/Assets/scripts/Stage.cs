@@ -47,8 +47,15 @@ public class Stage : MonoBehaviour
             timer = 0f;
         }
     }
+    void UpdateScoreUI() //1
+    {
+        if(scoretext != null)
+        {
+            scoretext.text = "Score: " + score.ToString();
 
-    void SpawnEnemy()
+        }
+    }
+    void SpawnEnemy() //1
     {
         if (Enemies1.Length == 0) return;
 
@@ -58,7 +65,7 @@ public class Stage : MonoBehaviour
         Instantiate(Enemies1[rand], spawnPos, Quaternion.identity);
     }//적 스폰 코드
 
-    Vector2 GetSpawnPosition()
+    Vector2 GetSpawnPosition() //2
     {
         float x = Random.Range(-8f, 8f);
         float y = Random.Range(-4f, 4f);
@@ -66,23 +73,16 @@ public class Stage : MonoBehaviour
         return new Vector2(x, y);
     } //스폰 포지션 및 속도 코드
 
-    public void AddScore(int amount)
+    public void AddScore(int amount) //3
     {
         score += amount;
         UpdateScoreUI();
     } //스코어판 코드
 
-    void UpdateScoreUI()
-    {
-        if(scoretext != null)
-        {
-            scoretext.text = "Score: " + score.ToString();
-
-        }
-    }
+    
     //오류남
    
-    void UpdateTimer()
+    void UpdateTimer() //5
     {
         if ((timerText != null))
         {
@@ -90,10 +90,57 @@ public class Stage : MonoBehaviour
         }
     }
 
-    public void GameOver()
-    {
-        
+    public void GameOver() //6
+    {  
             SceneManager.LoadScene(stage - 1);
     }
 
+}
+
+/*
+     * void UpdateScoreUI()
+    {
+        if(scoretext != null)
+        {
+            scoretext.text = "Score: " + score.ToString();
+        }
+    }
+
+    void UpdateTimer()
+    {
+        if((timerText != null))
+        {
+            timerText.text = "Time: " + Mathf.CeilToInt(currentTimer).ToString;
+        }
+    }
+
+    public void GameOver()
+    {
+        SceneManager.LoadScene(stage - 1);
+    }
+
+    void SpawnEnemy()
+    {
+        if (Enemies1.Length == 0) return;
+
+        int rand = Random.Range(0, Enemies1.Length);
+        Vector2 spqwnPos = GetSpawnPosition();
+
+        Instantiate(Enemies1[rand]m spawnPos, Q)
+    }
+
+    Vector2 GetSpawnPosition()
+    {
+        float x = Random.Range(-8f, 8f);
+        float y = Random.Range(-4f, 4f);
+
+        return new Vector2(x, y);
+    }
+
+    public void AddSocre(int amount)
+    {
+        score += amount;
+        UpdateScoreUI();
+    }
+    */
 }

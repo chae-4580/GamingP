@@ -74,20 +74,20 @@ public class Enemy : MonoBehaviour
         Fire();
     }
 
-    void Move()
+    void Move() //1
     {
         Vector3 dir = (player.position - transform.position).normalized;
         transform.position += dir * moveSpeed * Time.deltaTime;
     }
 
-    void LookAtPlayer()
+    void LookAtPlayer() //2
     {
         Vector3 dir = (player.position - transform.position).normalized;
 
         transform.rotation = Quaternion.FromToRotation(Vector3.up, dir);
     }
 
-    void Fire()
+    void Fire() //3
     {
         fireTimer += Time.deltaTime;
 
@@ -99,12 +99,12 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    void FireSingle()
+    void FireSingle() //4
     {
         Instantiate(missilePrefab, firePoint.position, firePoint.rotation);
     }
 
-    void OnTriggerEnter2D(Collider2D collision)
+    void OnTriggerEnter2D(Collider2D collision) //5
     {
         if (collision.CompareTag("Bullet"))
         {
@@ -113,7 +113,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public void TakeDamage(float damage)
+    public void TakeDamage(float damage) //6
     {
         hp -= damage;
         Debug.Log("적의 남은 체력: " + hp);
@@ -124,9 +124,10 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    void Die()
+    void Die() //7
     {
         GameObject.FindObjectOfType<Stage>().AddScore(100);
         Destroy(gameObject);
     }
-}
+
+    

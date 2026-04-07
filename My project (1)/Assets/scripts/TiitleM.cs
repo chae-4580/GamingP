@@ -14,6 +14,5 @@ public class TiitleM : MonoBehaviour
     public void GameExit()
     {
         Application.Quit();
-        Debug.Log("게임 종료!");
     }
 }
